@@ -22,7 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
           height: 60.0,
           child: const TextField(
             keyboardType: TextInputType.emailAddress,
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: Colors.white, fontFamily: 'OpenSans'),
             decoration: InputDecoration(
               border: InputBorder.none,
               contentPadding: EdgeInsets.only(top: 14.0),
@@ -30,12 +30,57 @@ class _LoginScreenState extends State<LoginScreen> {
                 Icons.email,
                 color: Colors.white,
               ),
-              hintText: 'Entre com seu email',
+              hintText: 'Email',
               hintStyle: kHintTextStyle,
             ),
           ),
         )
       ],
+    );
+  }
+
+  Widget _buildPasswordTF() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        const Text(
+          'Senha',
+          style: kLabelStyle,
+        ),
+        const SizedBox(height: 10.0),
+        Container(
+          alignment: Alignment.centerLeft,
+          decoration: kBoxDecorationStyle,
+          height: 60.0,
+          child: const TextField(
+            obscureText: true,
+            style: TextStyle(color: Colors.white, fontFamily: 'OpenSans'),
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.only(top: 14.0),
+              prefixIcon: Icon(
+                Icons.lock,
+                color: Colors.white,
+              ),
+              hintText: 'Senha',
+              hintStyle: kHintTextStyle,
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget _buildForgotPasswordBtn() {
+    return Container(
+      alignment: Alignment.centerRight,
+      child: TextButton(
+        onPressed: () => print('Esqueceu senha'),
+        child: const Text(
+          'Esqueceu senha?',
+          style: kLabelStyle,
+        ),
+      ),
     );
   }
 
@@ -71,6 +116,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 30.0),
                   _buildEmailTF(),
+                  const SizedBox(width: 30.0),
+                  _buildPasswordTF(),
+                  _buildForgotPasswordBtn(),
                 ],
               ),
             ),
