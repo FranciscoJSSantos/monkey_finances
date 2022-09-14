@@ -7,6 +7,14 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  Widget _monkey_image() {
+    return Column(
+      children: <Widget>[
+         new Image.asset('logo.png')
+      ],
+    );
+  }
+
   Widget _buildEmailTF() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -22,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
           height: 60.0,
           child: const TextField(
             keyboardType: TextInputType.emailAddress,
-            style: TextStyle(color: Colors.white, fontFamily: 'OpenSans'),
+            style: TextStyle(color: Colors.white, fontFamily: 'Roboto'),
             decoration: InputDecoration(
               border: InputBorder.none,
               contentPadding: EdgeInsets.only(top: 14.0),
@@ -54,7 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
           height: 60.0,
           child: const TextField(
             obscureText: true,
-            style: TextStyle(color: Colors.white, fontFamily: 'OpenSans'),
+            style: TextStyle(color: Colors.white, fontFamily: 'Roboto'),
             decoration: InputDecoration(
               border: InputBorder.none,
               contentPadding: EdgeInsets.only(top: 14.0),
@@ -105,18 +113,10 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  const Text(
-                    'Monkey Finances',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'OpenSans',
-                      fontSize: 30.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  _monkey_image() ,
                   const SizedBox(height: 30.0),
                   _buildEmailTF(),
-                  const SizedBox(width: 30.0),
+                  const SizedBox(height: 30.0),
                   _buildPasswordTF(),
                   _buildForgotPasswordBtn(),
                 ],
