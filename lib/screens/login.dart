@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:monkey_finances/utilities/constants.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -7,10 +8,13 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  bool? _rememberMe = false;
+
   Widget _monkey_image() {
-    return Column(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-         new Image.asset('logo.png')
+        Image.asset('logo.png', width: 200.0, height: 200.0),
       ],
     );
   }
@@ -92,10 +96,127 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  Widget _buildRememberMeCheckbox() {
+    return SizedBox(
+      height: 20.0,
+      child: Row(children: <Widget>[
+        Theme(
+          data: ThemeData(unselectedWidgetColor: Colors.white),
+          child: Checkbox(
+            value: _rememberMe,
+            checkColor: Colors.blue,
+            activeColor: Colors.white,
+            onChanged: (value) {
+              setState(() {
+                _rememberMe = value;
+              });
+            },
+          ),
+        ),
+        const Text(
+          'Lembrar de mim',
+          style: kLabelStyle,
+        )
+      ]),
+    );
+  }
+
+  Widget _buildLoginBtn() {
+    return Container(
+        padding: const EdgeInsets.symmetric(vertical: 25.0),
+        width: double.infinity,
+        child: ElevatedButton(
+          onPressed: () => print("botão de login pressionado"),
+          style: styledButtonLogin,
+          child: const Text(
+            'LOGIN',
+            style: TextStyle(
+                color: Color(0xFF263238),
+                letterSpacing: 1.5,
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'OpenSans'),
+          ),
+        ));
+  }
+
+  Widget _buildSignInWithText() {
+    return Column(
+      children: const <Widget>[
+        Text(
+          '- OU -',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w400),
+        ),
+        SizedBox(height: 20.0),
+        Text('Entrar com', style: kLabelStyle),
+      ],
+    );
+  }
+
+  Widget _buildSocialBtn(Function onTap, AssetImage logo) {
+    return GestureDetector(
+      onTap: onTap(),
+      child: Container(
+        height: 60.0,
+        width: 60.0,
+        decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.white,
+            boxShadow: const [
+              BoxShadow(
+                  color: Colors.black26, offset: Offset(0, 2), blurRadius: 6.0)
+            ],
+            image: DecorationImage(image: logo)),
+      ),
+    );
+  }
+
+  Widget _buildSocialBtnRow() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 30.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          _buildSocialBtn(() => print('Entrar com Facebook'),
+              const AssetImage('logos/facebook.jpg')),
+          _buildSocialBtn(() => print('Entrar com Google'),
+              const AssetImage('logos/google.jpg')),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSignUpBtn() {
+    return GestureDetector(
+      onTap: () => print('Botão pressionado!'),
+      child: RichText(
+          text: const TextSpan(
+        children: [
+          TextSpan(
+            text: 'Não possui uma conta? ',
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 18.0,
+                fontWeight: FontWeight.w400),
+          ),
+          TextSpan(
+            text: 'Inscreva-se',
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold),
+          ),
+        ],
+      )),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
+        body: AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light,
+      child: Stack(
         children: <Widget>[
           Container(
             height: double.infinity,
@@ -105,27 +226,31 @@ class _LoginScreenState extends State<LoginScreen> {
           SizedBox(
             height: double.infinity,
             child: SingleChildScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.symmetric(
                 horizontal: 40.0,
-                vertical: 120.0,
+                vertical: 40.0,
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  _monkey_image() ,
+                  _monkey_image(),
                   const SizedBox(height: 30.0),
                   _buildEmailTF(),
                   const SizedBox(height: 30.0),
                   _buildPasswordTF(),
                   _buildForgotPasswordBtn(),
+                  _buildRememberMeCheckbox(),
+                  _buildLoginBtn(),
+                  _buildSignInWithText(),
+                  _buildSocialBtnRow(),
+                  _buildSignUpBtn(),
                 ],
               ),
             ),
           ),
         ],
       ),
-    );
+    ));
   }
 }
 

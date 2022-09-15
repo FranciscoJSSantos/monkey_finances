@@ -22,3 +22,10 @@ final kBoxDecorationStyle = BoxDecoration(
     ),
   ],
 );
+
+final ButtonStyle styledButtonLogin = ElevatedButton.styleFrom(
+    backgroundColor: Colors.white,
+    textStyle: const TextStyle(fontSize: 20),
+    elevation: 5.0,
+    padding: const EdgeInsets.all(20.0),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)));
