@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Monkey Finances',
       debugShowCheckedModeBanner: false,
-      home: ForgotPasswordScreen(),
+      home: LoginScreen(),
     );
   }
 }

@@ -2,12 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:monkey_finances/utilities/constants.dart';
 
+import 'forgot_password.dart';
+
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  Route _createRoute() {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          ForgotPasswordScreen(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return child;
+      },
+    );
+  }
+
   bool? _rememberMe = false;
 
   Widget _monkey_image() {
@@ -18,7 +30,6 @@ class _LoginScreenState extends State<LoginScreen> {
       ],
     );
   }
-
 
   Widget _buildEmailTF() {
     return Column(
@@ -88,7 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Container(
       alignment: Alignment.centerRight,
       child: TextButton(
-        onPressed: () => print('Esqueceu senha'),
+        onPressed: () => Navigator.of(context).push(_createRoute()),
         child: const Text(
           'Esqueceu senha?',
           style: kLabelStyle,
@@ -127,7 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
         padding: const EdgeInsets.symmetric(vertical: 25.0),
         width: double.infinity,
         child: ElevatedButton(
-          onPressed: () => print("botão de login pressionado"),
+          onPressed: () => (""),
           style: styledButtonLogin,
           child: const Text(
             'LOGIN',

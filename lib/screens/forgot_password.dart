@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:monkey_finances/screens/login.dart';
 import 'package:monkey_finances/utilities/constants.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -8,6 +9,15 @@ class ForgotPasswordScreen extends StatefulWidget {
 }
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+  Route _createRoute() {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => LoginScreen(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return child;
+      },
+    );
+  }
+
   Widget _monkey_image() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -53,7 +63,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     return Container(
       alignment: Alignment.centerRight,
       child: TextButton(
-        onPressed: () => print('Esqueceu senha'),
+        onPressed: () => Navigator.of(context).push(_createRoute()),
         child: const Text(
           'Voltar ao Login',
           style: kLabelStyle,
