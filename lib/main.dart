@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monkey_finances/screens/login.dart';
+import 'package:monkey_finances/screens/forgot_password.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -9,7 +10,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Monkey Finances',
       debugShowCheckedModeBanner: false,
-      home: LoginScreen(),
+      home: ForgotPasswordScreen(),
     );
   }
 }
