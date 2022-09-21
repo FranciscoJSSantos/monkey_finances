@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:monkey_finances/screens/login.dart';
 import 'package:monkey_finances/utilities/constants.dart';
+import 'package:get/get.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   @override
@@ -63,7 +64,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     return Container(
       alignment: Alignment.centerRight,
       child: TextButton(
-        onPressed: () => Navigator.of(context).push(_createRoute()),
+        onPressed: () {Get.to(() => LoginScreen(), transition: Transition.leftToRight, duration: const Duration(milliseconds: 350));},
         child: const Text(
           'Voltar ao Login',
           style: kLabelStyle,

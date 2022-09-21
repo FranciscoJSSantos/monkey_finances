@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:monkey_finances/screens/login.dart';
 import 'package:monkey_finances/screens/forgot_password.dart';
+import 'package:get/get.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Monkey Finances',
       debugShowCheckedModeBanner: false,
       home: LoginScreen(),

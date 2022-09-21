@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:monkey_finances/utilities/constants.dart';
-
+import 'package:get/get.dart';
 import 'forgot_password.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -46,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
           height: 60.0,
           child: const TextField(
             keyboardType: TextInputType.emailAddress,
-            style: TextStyle(color: Colors.white, fontFamily: 'Roboto'),
+            style: TextStyle(color: Colors.white, fontFamily: 'Poppins'),
             decoration: InputDecoration(
               border: InputBorder.none,
               contentPadding: EdgeInsets.only(top: 14.0),
@@ -78,7 +79,7 @@ class _LoginScreenState extends State<LoginScreen> {
           height: 60.0,
           child: const TextField(
             obscureText: true,
-            style: TextStyle(color: Colors.white, fontFamily: 'Roboto'),
+            style: TextStyle(color: Colors.white, fontFamily: 'Poppins'),
             decoration: InputDecoration(
               border: InputBorder.none,
               contentPadding: EdgeInsets.only(top: 14.0),
@@ -95,13 +96,16 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+
   Widget _buildForgotPasswordBtn() {
     return Container(
-      alignment: Alignment.centerRight,
+      alignment: Alignment.topRight,
       child: TextButton(
-        onPressed: () => Navigator.of(context).push(_createRoute()),
+        onPressed: () {
+          Get.to(() => ForgotPasswordScreen(), transition: Transition.rightToLeft, duration: const Duration(milliseconds: 350));
+        },
         child: const Text(
-          'Esqueceu senha?',
+          'Esqueceu senha ?',
           style: kLabelStyle,
         ),
       ),
@@ -110,7 +114,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _buildRememberMeCheckbox() {
     return SizedBox(
-      height: 20.0,
       child: Row(children: <Widget>[
         Theme(
           data: ThemeData(unselectedWidgetColor: Colors.white),
@@ -147,7 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 letterSpacing: 1.5,
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold,
-                fontFamily: 'OpenSans'),
+                fontFamily: 'Poppins'),
           ),
         ));
   }

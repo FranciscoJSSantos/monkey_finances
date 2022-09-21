@@ -8,7 +8,7 @@ const kHintTextStyle = TextStyle(
 const kLabelStyle = TextStyle(
   color: Colors.white,
   fontWeight: FontWeight.bold,
-  fontFamily: 'Roboto',
+  fontFamily: 'Poppins',
 );
 
 final kBoxDecorationStyle = BoxDecoration(
