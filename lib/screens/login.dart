@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:monkey_finances/utilities/constants.dart';
 import 'package:get/get.dart';
 import 'forgot_password.dart';
+import 'register.dart';
+import 'home.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -11,16 +13,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  Route _createRoute() {
-    return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) =>
-          ForgotPasswordScreen(),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        return child;
-      },
-    );
-  }
-
   bool? _rememberMe = false;
 
   Widget _monkey_image() {
@@ -141,7 +133,9 @@ class _LoginScreenState extends State<LoginScreen> {
         padding: const EdgeInsets.symmetric(vertical: 25.0),
         width: double.infinity,
         child: ElevatedButton(
-          onPressed: () => (""),
+          onPressed: () {
+             Get.to(() => HomeScreen(), transition: Transition.rightToLeft, duration: const Duration(milliseconds: 350));
+          },
           style: styledButtonLogin,
           child: const Text(
             'LOGIN',
@@ -203,7 +197,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _buildSignUpBtn() {
     return GestureDetector(
-      onTap: () => print('Botão pressionado!'),
+      onTap: () {
+        Get.to(() => RegisterScreen(), transition: Transition.rightToLeft, duration: const Duration(milliseconds: 350));
+      },
       child: RichText(
           text: const TextSpan(
         children: [
