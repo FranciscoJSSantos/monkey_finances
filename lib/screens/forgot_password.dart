@@ -10,15 +10,6 @@ class ForgotPasswordScreen extends StatefulWidget {
 }
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
-  Route _createRoute() {
-    return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => LoginScreen(),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        return child;
-      },
-    );
-  }
-
   Widget _monkey_image() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -43,7 +34,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           height: 60.0,
           child: const TextField(
             keyboardType: TextInputType.emailAddress,
-            style: TextStyle(color: Colors.white, fontFamily: 'Roboto'),
+            style: TextStyle(color: Colors.white, fontFamily: 'Poppins'),
             decoration: InputDecoration(
               border: InputBorder.none,
               contentPadding: EdgeInsets.only(top: 14.0),
@@ -64,13 +55,40 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     return Container(
       alignment: Alignment.centerRight,
       child: TextButton(
-        onPressed: () {Get.to(() => LoginScreen(), transition: Transition.leftToRight, duration: const Duration(milliseconds: 350));},
+        onPressed: () {
+          Get.to(() => LoginScreen(),
+              transition: Transition.leftToRight,
+              duration: const Duration(milliseconds: 350));
+        },
         child: const Text(
           'Voltar ao Login',
           style: kLabelStyle,
         ),
       ),
     );
+  }
+
+  Widget _buildSendEmailBtn() {
+    return Container(
+        padding: const EdgeInsets.symmetric(vertical: 25.0),
+        width: double.infinity,
+        child: ElevatedButton(
+          onPressed: () {
+            Get.to(() => LoginScreen(),
+                transition: Transition.leftToRight,
+                duration: const Duration(milliseconds: 350));
+          },
+          style: styledButtonLogin,
+          child: const Text(
+            'ENVIAR',
+            style: TextStyle(
+                color: Color(0xFF263238),
+                letterSpacing: 1.5,
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Poppins'),
+          ),
+        ));
   }
 
   @override
@@ -99,12 +117,19 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       Container(
                         alignment: Alignment.center,
                         child: const Text(
-                            'Insira o seu email e enviaremos uma nova senha de acesso para sua conta.',
-                            style: TextStyle(color: Colors.white)),
+                          'Insira o seu email e enviaremos uma nova senha de acesso.',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'Poppins',
+                            fontSize: 18,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                       const SizedBox(height: 30.0),
                       _buildEmailTF(),
-                      _buildBackToLogin()
+                      _buildBackToLogin(),
+                      _buildSendEmailBtn()
                     ])),
           ),
         ],

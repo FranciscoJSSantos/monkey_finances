@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 const kHintTextStyle = TextStyle(
   color: Colors.white54,
-  fontFamily: 'Roboto',
+  fontFamily: 'Poppins',
 );
 
 const kLabelStyle = TextStyle(

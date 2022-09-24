@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:monkey_finances/screens/login.dart';
 import 'package:monkey_finances/utilities/constants.dart';
 import 'package:get/get.dart';
+import 'package:monkey_finances/screens/home.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -10,7 +11,6 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-
   Widget _monkey_image() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -34,13 +34,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
           decoration: kBoxDecorationStyle,
           height: 60.0,
           child: const TextField(
-            keyboardType: TextInputType.emailAddress,
-            style: TextStyle(color: Colors.white, fontFamily: 'Roboto'),
+            keyboardType: TextInputType.name,
+            style: TextStyle(color: Colors.white, fontFamily: 'Poppins'),
             decoration: InputDecoration(
               border: InputBorder.none,
               contentPadding: EdgeInsets.only(top: 14.0),
               prefixIcon: Icon(
-                Icons.email,
+                Icons.person,
                 color: Colors.white,
               ),
               hintText: 'Nome',
@@ -67,7 +67,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           height: 60.0,
           child: const TextField(
             keyboardType: TextInputType.emailAddress,
-            style: TextStyle(color: Colors.white, fontFamily: 'Roboto'),
+            style: TextStyle(color: Colors.white, fontFamily: 'Poppins'),
             decoration: InputDecoration(
               border: InputBorder.none,
               contentPadding: EdgeInsets.only(top: 14.0),
@@ -98,13 +98,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
           decoration: kBoxDecorationStyle,
           height: 60.0,
           child: const TextField(
-            keyboardType: TextInputType.emailAddress,
-            style: TextStyle(color: Colors.white, fontFamily: 'Roboto'),
+            obscureText: true,
+            style: TextStyle(color: Colors.white, fontFamily: 'Poppins'),
             decoration: InputDecoration(
               border: InputBorder.none,
               contentPadding: EdgeInsets.only(top: 14.0),
               prefixIcon: Icon(
-                Icons.email,
+                Icons.lock,
                 color: Colors.white,
               ),
               hintText: 'Senha',
@@ -130,13 +130,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
           decoration: kBoxDecorationStyle,
           height: 60.0,
           child: const TextField(
-            keyboardType: TextInputType.emailAddress,
-            style: TextStyle(color: Colors.white, fontFamily: 'Roboto'),
+            obscureText: true,
+            style: TextStyle(color: Colors.white, fontFamily: 'Poppins'),
             decoration: InputDecoration(
               border: InputBorder.none,
               contentPadding: EdgeInsets.only(top: 14.0),
               prefixIcon: Icon(
-                Icons.email,
+                Icons.lock,
                 color: Colors.white,
               ),
               hintText: 'Confirmar Senha',
@@ -152,7 +152,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Container(
       alignment: Alignment.centerRight,
       child: TextButton(
-        onPressed: () {Get.to(() => LoginScreen(), transition: Transition.leftToRight, duration: const Duration(milliseconds: 350));},
+        onPressed: () {
+          Get.to(() => LoginScreen(),
+              transition: Transition.leftToRight,
+              duration: const Duration(milliseconds: 350));
+        },
         child: const Text(
           'Voltar ao Login',
           style: kLabelStyle,
@@ -161,13 +165,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-   Widget _buildRegisterBtn() {
+  Widget _buildRegisterBtn() {
     return Container(
         padding: const EdgeInsets.symmetric(vertical: 25.0),
         width: double.infinity,
         child: ElevatedButton(
           onPressed: () {
-            Get.to(() => LoginScreen(), transition: Transition.leftToRight, duration: const Duration(milliseconds: 350));
+            Get.to(() => HomeScreen(),
+                transition: Transition.leftToRight,
+                duration: const Duration(milliseconds: 350));
           },
           style: styledButtonLogin,
           child: const Text(
@@ -181,7 +187,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
         ));
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -208,14 +213,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       _monkey_image(),
                       Container(
                         alignment: Alignment.center,
-                        child: const Text(
-                            'Crie Sua Conta',
-                            style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 30, fontWeight: FontWeight.bold)),
+                        child: const Text('Crie Sua Conta',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Poppins',
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold)),
                       ),
                       const SizedBox(height: 30.0),
                       _buildNameTF(),
                       const SizedBox(height: 30.0),
-                       _buildEmailTF(),
+                      _buildEmailTF(),
                       const SizedBox(height: 30.0),
                       _buildPasswordTF(),
                       const SizedBox(height: 30.0),

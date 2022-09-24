@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:monkey_finances/screens/login.dart';
 import 'package:monkey_finances/utilities/constants.dart';
 import 'package:get/get.dart';
@@ -10,7 +9,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   Widget _monkey_image() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -35,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
           height: 60.0,
           child: const TextField(
             keyboardType: TextInputType.emailAddress,
-            style: TextStyle(color: Colors.white, fontFamily: 'Roboto'),
+            style: TextStyle(color: Colors.white, fontFamily: 'Poppins'),
             decoration: InputDecoration(
               border: InputBorder.none,
               contentPadding: EdgeInsets.only(top: 14.0),
@@ -56,7 +54,11 @@ class _HomeScreenState extends State<HomeScreen> {
     return Container(
       alignment: Alignment.centerRight,
       child: TextButton(
-        onPressed: () {Get.to(() => LoginScreen(), transition: Transition.leftToRight, duration: const Duration(milliseconds: 350));},
+        onPressed: () {
+          Get.to(() => LoginScreen(),
+              transition: Transition.leftToRight,
+              duration: const Duration(milliseconds: 350));
+        },
         child: const Text(
           'Voltar ao Login',
           style: kLabelStyle,
@@ -71,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   static const List<Widget> _widgetOptions = <Widget>[
     Text(
-      ' ',
+      'Carteira em construção...',
       style: optionStyle,
     ),
     Text(
@@ -79,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
       style: optionStyle,
     ),
     Text(
-      ' ',
+      'Meu Perfil em construção...',
       style: optionStyle,
     ),
   ];
@@ -90,27 +92,25 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-       backgroundColor: Colors.black,
-       leading: IconButton(
-         icon: Icon(Icons.person, color: Colors.black),
-         onPressed: () => Navigator.of(context).pop(),
-       ),
-       iconTheme: IconThemeData(
+        backgroundColor: Colors.black,
+        leading: IconButton(
+          icon: const Icon(Icons.person, color: Colors.black),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        iconTheme: const IconThemeData(
           color: Colors.white, // <-- SEE HERE
         ),
         centerTitle: true,
-  actions: [
-    IconButton(
-      onPressed: () => Navigator.of(context).pop(), 
-      icon:  Icon(Icons.logout)
-      )
-    ],
-  ),
+        actions: [
+          IconButton(
+              onPressed: () => Navigator.of(context).pop(),
+              icon: const Icon(Icons.logout))
+        ],
+      ),
       body: Center(
         child: Container(child: _widgetOptions.elementAt(_selectedIndex)),
       ),
@@ -131,7 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Color(0xFF2062E6),
+        selectedItemColor: const Color(0xFF2062E6),
         onTap: _onItemTapped,
       ),
     );
