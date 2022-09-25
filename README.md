@@ -1,16 +1,30 @@
-# monkey_finances
+# Monkey Finances
 
-A new Flutter project.
 
-## Getting Started
+## Desenvolvedores 🧑‍💻
 
-This project is a starting point for a Flutter application.
+- Francisco José
+- Brenno Santos
 
-A few resources to get you started if this is your first Flutter project:
+## Linguagens 📘
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- Flutter
+- Dart
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## EXECUÇÃO DO CÓDIGO NA SUA MÁQUINA
+
+- abra o projeto dentro do visual studio code.
+- no terminal digite 'flutter create .' (isso fará com que ele importe as dependências necessárias para rodar o projeto).
+- no terminal digite 'cd lib'
+- digite 'flutter run' no terminal'
+- escolha a opção de rodar pelo Chrome 
+- aproveite o sistema :)
+
+## DÚVIDAS
+
+- qualquer dúvida na execução do projeto entrar em contato com:
+  - francisco.jsantos@souunit.com.br
+
+## LINK DO VÍDEO
+
+- https://www.youtube.com/watch?v=XUjWNkU5YEM
