@@ -28,3 +28,7 @@
 ## LINK DO VÍDEO
 
 - https://www.youtube.com/watch?v=XUjWNkU5YEM
+
+## LINK PARA DOCUMENTAÇÃO
+
+- https://docs.google.com/document/d/1dWT3KWJm03LXDy20Bk8ql2nsress329mgNKef88Ytwg/edit?usp=sharing
