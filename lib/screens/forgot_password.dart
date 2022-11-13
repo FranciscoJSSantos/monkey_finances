@@ -14,7 +14,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Image.asset('logo.png', width: 200.0, height: 200.0),
+        Image.asset('assets/logo.png', width: 200.0, height: 200.0),
       ],
     );
   }

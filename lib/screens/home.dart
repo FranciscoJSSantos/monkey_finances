@@ -1,7 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:monkey_finances/provider/google_sign_in.dart';
 import 'package:monkey_finances/screens/login.dart';
 import 'package:monkey_finances/utilities/constants.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -13,7 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Image.asset('logo.png', width: 200.0, height: 200.0),
+        Image.asset('assets/logo.png', width: 200.0, height: 200.0),
       ],
     );
   }
@@ -71,20 +74,36 @@ class _HomeScreenState extends State<HomeScreen> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Carteira em construção...',
-      style: optionStyle,
-    ),
-    Text(
-      'Bem Vindo, Francisco!',
-      style: optionStyle,
-    ),
-    Text(
-      'Meu Perfil em construção...',
-      style: optionStyle,
-    ),
-  ];
+  //componente pra usuario
+  var user = FirebaseAuth.instance.currentUser!;
+
+  Widget _userProfile() {
+    return Container(
+        alignment: Alignment.center,
+        color: Colors.white,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              "Perfil",
+              style: TextStyle(fontSize: 24),
+            ),
+            const SizedBox(height: 32),
+            CircleAvatar(
+              radius: 40,
+              backgroundImage: NetworkImage(user.photoURL!),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Name: ${user.displayName!}',
+              style: const TextStyle(color: Colors.black, fontSize: 16),
+            ),
+            const SizedBox(height: 8),
+            Text("Email: ${user.email!}",
+                style: const TextStyle(color: Colors.black, fontSize: 16))
+          ],
+        ));
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -94,12 +113,33 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> widgetOptions = <Widget>[
+      const Text(
+        'Carteira em construção...',
+        style: optionStyle,
+      ),
+      const Text(
+        'Bem Vindo, Francisco!',
+        style: optionStyle,
+      ),
+      Container(
+          alignment: Alignment.center,
+          color: Colors.white,
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[_userProfile()]))
+    ];
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
         leading: IconButton(
           icon: const Icon(Icons.person, color: Colors.black),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            final provider = Provider.of(context, listen: false);
+            provider.logout();
+            // Navigator.of(context).pop();
+          },
         ),
         iconTheme: const IconThemeData(
           color: Colors.white, // <-- SEE HERE
@@ -107,12 +147,20 @@ class _HomeScreenState extends State<HomeScreen> {
         centerTitle: true,
         actions: [
           IconButton(
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () {
+                final provider =
+                    Provider.of<GoogleSignInProvider>(context, listen: false);
+                provider.logout();
+
+                Get.to(() => LoginScreen(),
+                    transition: Transition.rightToLeft,
+                    duration: const Duration(milliseconds: 350));
+              },
               icon: const Icon(Icons.logout))
         ],
       ),
       body: Center(
-        child: Container(child: _widgetOptions.elementAt(_selectedIndex)),
+        child: Container(child: widgetOptions.elementAt(_selectedIndex)),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[

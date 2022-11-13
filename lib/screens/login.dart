@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:monkey_finances/provider/google_sign_in.dart';
 import 'package:monkey_finances/utilities/constants.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'forgot_password.dart';
 import 'register.dart';
 import 'home.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -19,7 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Image.asset('logo.png', width: 200.0, height: 200.0),
+        Image.asset('assets/logo.png', width: 200.0, height: 200.0),
       ],
     );
   }
@@ -88,13 +89,14 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-
   Widget _buildForgotPasswordBtn() {
     return Container(
       alignment: Alignment.topRight,
       child: TextButton(
         onPressed: () {
-          Get.to(() => ForgotPasswordScreen(), transition: Transition.rightToLeft, duration: const Duration(milliseconds: 350));
+          Get.to(() => ForgotPasswordScreen(),
+              transition: Transition.rightToLeft,
+              duration: const Duration(milliseconds: 350));
         },
         child: const Text(
           'Esqueceu senha ?',
@@ -105,7 +107,8 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _buildRememberMeCheckbox() {
-    return SizedBox(
+    return Container(
+      alignment: Alignment.topLeft,
       child: Row(children: <Widget>[
         Theme(
           data: ThemeData(unselectedWidgetColor: Colors.white),
@@ -134,7 +137,9 @@ class _LoginScreenState extends State<LoginScreen> {
         width: double.infinity,
         child: ElevatedButton(
           onPressed: () {
-             Get.to(() => HomeScreen(), transition: Transition.rightToLeft, duration: const Duration(milliseconds: 350));
+            Get.to(() => HomeScreen(),
+                transition: Transition.rightToLeft,
+                duration: const Duration(milliseconds: 350));
           },
           style: styledButtonLogin,
           child: const Text(
@@ -156,49 +161,56 @@ class _LoginScreenState extends State<LoginScreen> {
           '- OU -',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.w400),
         ),
-        SizedBox(height: 20.0),
-        Text('Entrar com', style: kLabelStyle),
+        SizedBox(height: 20.0)
       ],
     );
   }
 
-  Widget _buildSocialBtn(Function onTap, AssetImage logo) {
-    return GestureDetector(
-      onTap: onTap(),
+  Widget _buildSocialBtn() {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF212121)),
+      onPressed: () {
+        final provider =
+            Provider.of<GoogleSignInProvider>(context, listen: false);
+        provider.googleLogin();
+      },
       child: Container(
         height: 60.0,
         width: 60.0,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
             shape: BoxShape.circle,
             color: Colors.white,
-            boxShadow: const [
+            boxShadow: [
               BoxShadow(
                   color: Colors.black26, offset: Offset(0, 2), blurRadius: 6.0)
             ],
-            image: DecorationImage(image: logo)),
+            image:
+                DecorationImage(image: AssetImage('assets/logos/google.jpg'))),
       ),
     );
   }
 
-  Widget _buildSocialBtnRow() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 30.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          _buildSocialBtn(() => print('Entrar com Facebook'),
-              const AssetImage('logos/facebook.jpg')),
-          _buildSocialBtn(() => print('Entrar com Google'),
-              const AssetImage('logos/google.jpg')),
-        ],
-      ),
-    );
-  }
+  // Widget _buildSocialBtnRow() {
+  //   return Padding(
+  //     padding: const EdgeInsets.symmetric(vertical: 30.0),
+  //     child: Row(
+  //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //       children: <Widget>[
+  //         _buildSocialBtn(() => print('Entrar com Facebook'),
+  //             const AssetImage('assets/logos/facebook.jpg')),
+  //         _buildSocialBtn(() => print('Entrar com Google'),
+  //             const AssetImage('assets/logos/google.jpg')),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget _buildSignUpBtn() {
     return GestureDetector(
       onTap: () {
-        Get.to(() => RegisterScreen(), transition: Transition.rightToLeft, duration: const Duration(milliseconds: 350));
+        Get.to(() => RegisterScreen(),
+            transition: Transition.rightToLeft,
+            duration: const Duration(milliseconds: 350));
       },
       child: RichText(
           text: const TextSpan(
@@ -238,22 +250,29 @@ class _LoginScreenState extends State<LoginScreen> {
             height: double.infinity,
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(
-                horizontal: 40.0,
+                horizontal: 20.0,
                 vertical: 40.0,
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   _monkey_image(),
-                  const SizedBox(height: 30.0),
+                  const SizedBox(height: 5.0),
                   _buildEmailTF(),
-                  const SizedBox(height: 30.0),
+                  const SizedBox(height: 20.0),
                   _buildPasswordTF(),
-                  _buildForgotPasswordBtn(),
-                  _buildRememberMeCheckbox(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _buildRememberMeCheckbox(),
+                      _buildForgotPasswordBtn(),
+                    ],
+                  ),
                   _buildLoginBtn(),
                   _buildSignInWithText(),
-                  _buildSocialBtnRow(),
+                  _buildSocialBtn(),
+                  const SizedBox(height: 20.0),
+                  // _buildSocialBtnRow(),
                   _buildSignUpBtn(),
                 ],
               ),

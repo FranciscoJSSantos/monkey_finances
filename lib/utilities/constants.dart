@@ -6,10 +6,10 @@ const kHintTextStyle = TextStyle(
 );
 
 const kLabelStyle = TextStyle(
-  color: Colors.white,
-  fontWeight: FontWeight.bold,
-  fontFamily: 'Poppins',
-);
+    color: Colors.white,
+    fontWeight: FontWeight.bold,
+    fontFamily: 'Poppins',
+    height: 1.0);
 
 final kBoxDecorationStyle = BoxDecoration(
   color: const Color(0xFF263238),
