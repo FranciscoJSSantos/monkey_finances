@@ -79,30 +79,40 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _userProfile() {
     return Container(
-        alignment: Alignment.center,
-        color: Colors.white,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              "Perfil",
-              style: TextStyle(fontSize: 24),
+      child: Flexible(
+          child: Stack(
+              alignment: AlignmentDirectional.topCenter,
+              children: <Widget>[
+            Column(
+              children: [
+                const SizedBox(height: 30),
+                const Text(
+                  "Perfil",
+                  style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 150),
+                CircleAvatar(
+                  minRadius: 50,
+                  maxRadius: 50,
+                  backgroundImage: NetworkImage(user.photoURL!),
+                )
+              ],
             ),
-            const SizedBox(height: 32),
-            CircleAvatar(
-              radius: 40,
-              backgroundImage: NetworkImage(user.photoURL!),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Name: ${user.displayName!}',
-              style: const TextStyle(color: Colors.black, fontSize: 16),
-            ),
-            const SizedBox(height: 8),
-            Text("Email: ${user.email!}",
-                style: const TextStyle(color: Colors.black, fontSize: 16))
-          ],
-        ));
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(height: 200),
+                Text(
+                  'Nome: ${user.displayName!}',
+                  style: const TextStyle(color: Colors.black, fontSize: 18),
+                ),
+                const SizedBox(height: 12),
+                Text("Email: ${user.email!}",
+                    style: const TextStyle(color: Colors.black, fontSize: 18))
+              ],
+            )
+          ])),
+    );
   }
 
   void _onItemTapped(int index) {
@@ -118,8 +128,8 @@ class _HomeScreenState extends State<HomeScreen> {
         'Carteira em construção...',
         style: optionStyle,
       ),
-      const Text(
-        'Bem Vindo, Francisco!',
+      Text(
+        'Bem Vindo, ${user.displayName!}!',
         style: optionStyle,
       ),
       Container(

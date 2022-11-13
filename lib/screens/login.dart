@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:monkey_finances/provider/google_sign_in.dart';
@@ -6,7 +8,6 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'forgot_password.dart';
 import 'register.dart';
-import 'home.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -15,6 +16,24 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool? _rememberMe = false;
+
+  final controllerEmail = TextEditingController();
+  final controllerPassword = TextEditingController();
+
+  final docUser = FirebaseFirestore.instance.collection('users');
+
+  Future checkUser() async {
+    try {
+      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: controllerEmail.text, password: controllerPassword.text);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        print('Wrong password provided for that user.');
+      }
+    }
+  }
 
   Widget _monkey_image() {
     return Row(
@@ -38,10 +57,11 @@ class _LoginScreenState extends State<LoginScreen> {
           alignment: Alignment.centerLeft,
           decoration: kBoxDecorationStyle,
           height: 60.0,
-          child: const TextField(
+          child: TextField(
+            controller: controllerEmail,
             keyboardType: TextInputType.emailAddress,
-            style: TextStyle(color: Colors.white, fontFamily: 'Poppins'),
-            decoration: InputDecoration(
+            style: const TextStyle(color: Colors.white, fontFamily: 'Poppins'),
+            decoration: const InputDecoration(
               border: InputBorder.none,
               contentPadding: EdgeInsets.only(top: 14.0),
               prefixIcon: Icon(
@@ -70,10 +90,11 @@ class _LoginScreenState extends State<LoginScreen> {
           alignment: Alignment.centerLeft,
           decoration: kBoxDecorationStyle,
           height: 60.0,
-          child: const TextField(
+          child: TextField(
+            controller: controllerPassword,
             obscureText: true,
-            style: TextStyle(color: Colors.white, fontFamily: 'Poppins'),
-            decoration: InputDecoration(
+            style: const TextStyle(color: Colors.white, fontFamily: 'Poppins'),
+            decoration: const InputDecoration(
               border: InputBorder.none,
               contentPadding: EdgeInsets.only(top: 14.0),
               prefixIcon: Icon(
@@ -131,15 +152,34 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  Future openDialog(String descricao) => showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+            actionsAlignment: MainAxisAlignment.center,
+            title: Text(descricao, textAlign: TextAlign.center),
+            actions: [
+              TextButton(
+                onPressed: submit,
+                child: const Text('Voltar'),
+              )
+            ],
+          ));
+
+  void submit() {
+    Navigator.of(context).pop();
+  }
+
   Widget _buildLoginBtn() {
     return Container(
         padding: const EdgeInsets.symmetric(vertical: 25.0),
         width: double.infinity,
         child: ElevatedButton(
           onPressed: () {
-            Get.to(() => HomeScreen(),
-                transition: Transition.rightToLeft,
-                duration: const Duration(milliseconds: 350));
+            if (controllerEmail.text != "" || controllerPassword.text != "") {
+              checkUser();
+            } else {
+              openDialog("Preencha os dados corretamente");
+            }
           },
           style: styledButtonLogin,
           child: const Text(
