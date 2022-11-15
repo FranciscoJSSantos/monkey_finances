@@ -77,6 +77,11 @@ class _HomeScreenState extends State<HomeScreen> {
   //componente pra usuario
   var user = FirebaseAuth.instance.currentUser!;
 
+  var nomeGenerico = "brenno";
+  var emailGenerico = "brenno@example.com";
+  var fotoGenerica =
+      "https://images.unsplash.com/photo-1547721064-da6cfb341d50";
+
   Widget _userProfile() {
     return Container(
       child: Flexible(
@@ -94,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 CircleAvatar(
                   minRadius: 50,
                   maxRadius: 50,
-                  backgroundImage: NetworkImage(user.photoURL!),
+                  backgroundImage: NetworkImage(user.photoURL ?? fotoGenerica),
                 )
               ],
             ),
@@ -103,11 +108,11 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 const SizedBox(height: 200),
                 Text(
-                  'Nome: ${user.displayName!}',
+                  'Nome: ${user.displayName ?? nomeGenerico}',
                   style: const TextStyle(color: Colors.black, fontSize: 18),
                 ),
                 const SizedBox(height: 12),
-                Text("Email: ${user.email!}",
+                Text("Email: ${user.email ?? emailGenerico}",
                     style: const TextStyle(color: Colors.black, fontSize: 18))
               ],
             )
@@ -129,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
         style: optionStyle,
       ),
       Text(
-        'Bem Vindo, ${user.displayName!}!',
+        'Bem Vindo, ${user.displayName ?? nomeGenerico}!',
         style: optionStyle,
       ),
       Container(

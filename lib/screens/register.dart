@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:monkey_finances/screens/login.dart';
@@ -49,6 +50,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
     await docUser.set(json);
   }
 
+  Future authCreateUser(String userEmail, String userPassword) async {
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: userEmail, password: userPassword);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        print('The account already exists for that email.');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future openDialog(String descricao) => showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -77,39 +94,39 @@ class _RegisterScreenState extends State<RegisterScreen> {
       );
     }
 
-    Widget _buildNameTF() {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          const Text(
-            'Nome',
-            style: kLabelStyle,
-          ),
-          const SizedBox(height: 10.0),
-          Container(
-            alignment: Alignment.centerLeft,
-            decoration: kBoxDecorationStyle,
-            height: 60.0,
-            child: TextField(
-              controller: controllerName,
-              keyboardType: TextInputType.name,
-              style:
-                  const TextStyle(color: Colors.white, fontFamily: 'Poppins'),
-              decoration: const InputDecoration(
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.only(top: 14.0),
-                prefixIcon: Icon(
-                  Icons.person,
-                  color: Colors.white,
-                ),
-                hintText: 'Nome',
-                hintStyle: kHintTextStyle,
-              ),
-            ),
-          )
-        ],
-      );
-    }
+    // Widget _buildNameTF() {
+    //   return Column(
+    //     crossAxisAlignment: CrossAxisAlignment.start,
+    //     children: <Widget>[
+    //       const Text(
+    //         'Nome',
+    //         style: kLabelStyle,
+    //       ),
+    //       const SizedBox(height: 10.0),
+    //       Container(
+    //         alignment: Alignment.centerLeft,
+    //         decoration: kBoxDecorationStyle,
+    //         height: 60.0,
+    //         child: TextField(
+    //           controller: controllerName,
+    //           keyboardType: TextInputType.name,
+    //           style:
+    //               const TextStyle(color: Colors.white, fontFamily: 'Poppins'),
+    //           decoration: const InputDecoration(
+    //             border: InputBorder.none,
+    //             contentPadding: EdgeInsets.only(top: 14.0),
+    //             prefixIcon: Icon(
+    //               Icons.person,
+    //               color: Colors.white,
+    //             ),
+    //             hintText: 'Nome',
+    //             hintStyle: kHintTextStyle,
+    //           ),
+    //         ),
+    //       )
+    //     ],
+    //   );
+    // }
 
     Widget _buildEmailTF() {
       return Column(
@@ -242,8 +259,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   password: controllerPassword.text,
                   confirmPassword: controllerConfirmPassword.text);
 
-              if (user.name == "" ||
-                  user.email == "" ||
+              if (user.email == "" ||
                   user.password == "" ||
                   user.confirmPassword == "") {
                 final dialog =
@@ -252,7 +268,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
               } else if (user.password != user.confirmPassword) {
                 final dialog = await openDialog("As senhas não estão iguais");
                 if (dialog == null || dialog.isEmpty) return;
+              } else if (user.password!.length < 5) {
+                final dialog = await openDialog("Senha fraca");
               } else {
+                authCreateUser(controllerEmail.text, controllerPassword.text);
                 createUser(user);
 
                 Get.to(() => LoginScreen(),
@@ -304,7 +323,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 fontWeight: FontWeight.bold)),
                       ),
                       const SizedBox(height: 30.0),
-                      _buildNameTF(),
+                      // _buildNameTF(),
                       const SizedBox(height: 30.0),
                       _buildEmailTF(),
                       const SizedBox(height: 30.0),

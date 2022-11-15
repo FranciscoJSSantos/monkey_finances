@@ -7,6 +7,7 @@ import 'package:monkey_finances/utilities/constants.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'forgot_password.dart';
+import 'home.dart';
 import 'register.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -24,8 +25,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future checkUser() async {
     try {
-      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: controllerEmail.text, password: controllerPassword.text);
+      UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+              email: controllerEmail.text, password: controllerPassword.text);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
@@ -177,6 +179,10 @@ class _LoginScreenState extends State<LoginScreen> {
           onPressed: () {
             if (controllerEmail.text != "" || controllerPassword.text != "") {
               checkUser();
+
+              Get.to(() => HomeScreen(),
+                  transition: Transition.rightToLeft,
+                  duration: const Duration(milliseconds: 350));
             } else {
               openDialog("Preencha os dados corretamente");
             }
