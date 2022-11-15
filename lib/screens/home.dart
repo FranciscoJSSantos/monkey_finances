@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:monkey_finances/provider/google_sign_in.dart';
 import 'package:monkey_finances/screens/login.dart';
@@ -12,6 +13,49 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final controllerSalary = TextEditingController();
+
+  var dbRef;
+
+  @override
+  void initialState() {
+    super.initState();
+    dbRef = FirebaseDatabase.instance.ref().child('wallet');
+  }
+
+  Widget _buildSalaray() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        const Text(
+          'Salario',
+          style: kLabelStyle,
+        ),
+        const SizedBox(height: 10.0),
+        Container(
+          alignment: Alignment.centerLeft,
+          decoration: kBoxDecorationStyle,
+          height: 60.0,
+          child: TextField(
+            controller: controllerSalary,
+            keyboardType: TextInputType.number,
+            style: const TextStyle(color: Colors.white, fontFamily: 'Poppins'),
+            decoration: const InputDecoration(
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.only(top: 14.0),
+              prefixIcon: Icon(
+                Icons.email,
+                color: Colors.white,
+              ),
+              hintText: 'Wallet',
+              hintStyle: kHintTextStyle,
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
   Widget _monkey_image() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -129,10 +173,23 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> widgetOptions = <Widget>[
-      const Text(
-        'Carteira em construção...',
-        style: optionStyle,
-      ),
+      Container(
+          alignment: Alignment.center,
+          color: Colors.white,
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                _buildSalaray(),
+                const SizedBox(height: 30),
+                MaterialButton(
+                  onPressed: () {
+                    var sal = controllerSalary;
+
+                    dbRef.set(sal);
+                  },
+                  color: Colors.black,
+                )
+              ])),
       Text(
         'Bem Vindo, ${user.displayName ?? nomeGenerico}!',
         style: optionStyle,

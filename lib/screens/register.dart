@@ -138,9 +138,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
           const SizedBox(height: 10.0),
           Container(
-            alignment: Alignment.centerLeft,
-            decoration: kBoxDecorationStyle,
-            height: 60.0,
             child: TextField(
               controller: controllerEmail,
               keyboardType: TextInputType.emailAddress,
