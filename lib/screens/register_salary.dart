@@ -67,7 +67,7 @@ class _RegisterSalaryState extends State<RegisterSalary>{
           IconButton(
               onPressed: () {
                 final salary = WalletRegister(
-                    value: int.parse(controllerSalary.text!),
+                    value: double.parse(controllerSalary.text!),
                     tipo: controllerTipo);
 
                 createSalary(salary);

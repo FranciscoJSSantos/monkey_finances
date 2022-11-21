@@ -8,7 +8,8 @@ import 'package:monkey_finances/screens/register_salary.dart';
 import 'package:monkey_finances/utilities/constants.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:collection/collection.dart';
+import 'dart:core';
+import 'dart:math';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -17,7 +18,7 @@ class HomeScreen extends StatefulWidget {
 
 class WalletRegister {
   String? id;
-  final int? value;
+  final double? value;
   final String? tipo;
 
   WalletRegister(
@@ -33,6 +34,7 @@ class WalletRegister {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
 
   Future createSalary(WalletRegister salary) async {
     final docUser = FirebaseFirestore.instance.collection('wallet').doc();
@@ -53,7 +55,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initialState() {
     super.initState();
-    dbRef = FirebaseDatabase.instance.ref().child('wallet');
   }
 
   Widget _buildSalaray() {
@@ -246,25 +247,35 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return docRef.snapshots().map((dados) => dados.data() as List<WalletRegister>);
   }
-  
+
+  double? testeValor = 0.0;
+  double? totalListWallet = 0.0;
+
+  List<double> valorPositivo = [];
+  List<double> valorNegativo = [];
+
   sumWallet() {
-    FirebaseFirestore.instance.collection("wallet").snapshots();
-    var snapshot;
-    var totalListWallet = 0;
-    AsyncSnapshot<QuerySnapshot> dados = snapshot.data!.docs.map((document) {
-      var valorPositivo = 0;
-      var valorNegativo = 0;
+     FirebaseFirestore.instance
+        .collection("wallet")
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        if(doc['tipo'] == "Lucro") {
+          valorPositivo.add(doc['value'].toDouble());
+        } else {
+          valorNegativo.add(doc['value'].toDouble());
+        }
+      });
 
-      if(document['tipo'] == "Lucro") {
-        valorPositivo += document['value'] as int;
-      } else {
-        valorNegativo += document['value'] as int;
+      totalListWallet = valorPositivo.reduce((a, b) => a + b) - valorNegativo.reduce((a, b) => a + b);
+      testeValor = totalListWallet;
       }
-      totalListWallet = valorPositivo - valorNegativo;
-    });
+    );
 
-    return totalListWallet;
+  return testeValor;
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -281,16 +292,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
           return ListView(
             children: snapshot.data!.docs.map((document) {
-              var valorPositivo = 0;
-              var valorNegativo = 0;
-
-              if(document['tipo'] == "Lucro") {
-                valorPositivo += document['value'] as int;
-              } else {
-                valorNegativo += document['value'] as int;
-              }
-              var totalListWallet = valorPositivo - valorNegativo;
-
               DocumentReference<Map<String, dynamic>>;
               return ListTile(
                 leading: const Icon(Icons.attach_money),
@@ -325,9 +326,14 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         }
     ),
-      Text(
-        'Bem Vindo, ${user?.displayName ?? nomeGenerico}!',
-        style: optionStyle,
+      Column(
+        children: [
+          Text(
+            'Bem Vindo, ${user?.displayName ?? nomeGenerico}!',
+            style: optionStyle,
+          ),
+          Text(sumWallet().toString(), style: optionStyle,)
+        ],
       ),
       Container(
           alignment: Alignment.center,
