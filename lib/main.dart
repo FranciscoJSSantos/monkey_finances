@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:monkey_finances/provider/google_sign_in.dart';
 import 'package:monkey_finances/screens/home.dart';
+import 'package:monkey_finances/screens/login.dart';
 import 'package:provider/provider.dart';
 
 Future main() async {
