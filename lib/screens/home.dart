@@ -18,24 +18,16 @@ class HomeScreen extends StatefulWidget {
 
 class WalletRegister {
   String? id;
+  final String? nameType;
   final double? value;
   final String? tipo;
 
-  WalletRegister(
-      {this.id = '',
-        required this.value,
-        required this.tipo});
+  WalletRegister({this.id = '', required this.nameType,required this.value, required this.tipo});
 
-  Map<String, dynamic> toJson() => {
-    'id': id,
-    'value': value,
-    'tipo': tipo
-  };
+  Map<String, dynamic> toJson() => {'id': id, 'nameType': nameType,'value': value, 'tipo': tipo};
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
-
   Future createSalary(WalletRegister salary) async {
     final docUser = FirebaseFirestore.instance.collection('wallet').doc();
 
@@ -45,7 +37,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
     await docUser.set(json);
   }
-
 
   final controllerSalary = TextEditingController();
   String? controllerTipo;
@@ -184,17 +175,15 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         value: controllerTipo,
         items: items
-            .map((item) =>
-              DropdownMenuItem<String>(
-                  value: item,
-                  child: Text(item, style: TextStyle(fontSize: 24)))).toList(),
+            .map((item) => DropdownMenuItem<String>(
+                value: item, child: Text(item, style: TextStyle(fontSize: 24))))
+            .toList(),
         onChanged: (item) => setState(() {
           selectedItem = item;
           controllerTipo = selectedItem;
         }),
-
-        ),
-      );
+      ),
+    );
   }
 
   Widget _userProfile() {
@@ -245,94 +234,225 @@ class _HomeScreenState extends State<HomeScreen> {
     final db = FirebaseFirestore.instance;
     final docRef = db.collection("movies").doc();
 
-    return docRef.snapshots().map((dados) => dados.data() as List<WalletRegister>);
+    return docRef
+        .snapshots()
+        .map((dados) => dados.data() as List<WalletRegister>);
   }
-
-  double? testeValor = 0.0;
-  double? totalListWallet = 0.0;
-
-  List<double> valorPositivo = [];
-  List<double> valorNegativo = [];
-
-  sumWallet() {
-     FirebaseFirestore.instance
-        .collection("wallet")
-        .get()
-        .then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((doc) {
-        if(doc['tipo'] == "Lucro") {
-          valorPositivo.add(doc['value'].toDouble());
-        } else {
-          valorNegativo.add(doc['value'].toDouble());
-        }
-      });
-
-      totalListWallet = valorPositivo.reduce((a, b) => a + b) - valorNegativo.reduce((a, b) => a + b);
-      testeValor = totalListWallet;
-      }
-    );
-
-  return testeValor;
-  }
-
-
 
   @override
   Widget build(BuildContext context) {
+    double? sumTotal = 0.0;
+
+    double? valorPositivo = 0.0;
+    double? valorNegativo = 0.0;
+
+    //parte do positivo
+    double? sumTotalPositivo = 0.0;
+    double? sumTotalNegativo = 0.0;
+    double? valorPositivoNew = 0.0;
+
     final List<Widget> widgetOptions = <Widget>[
-    StreamBuilder(
-        stream: FirebaseFirestore.instance.collection("wallet").snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if(!snapshot.hasData){
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-
-
-          return ListView(
-            children: snapshot.data!.docs.map((document) {
-              DocumentReference<Map<String, dynamic>>;
-              return ListTile(
-                leading: const Icon(Icons.attach_money),
-                title: Text(document['value'].toString(), style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
-                subtitle: Text(document['tipo'],
-                  style: document['tipo'] == "Lucro" ?
-                  TextStyle(color: Colors.green) :
-                  TextStyle(color: Colors.red),),
-                trailing: SizedBox(
-                  width: 100,
-                  child: Row(children: <Widget>[
-                    IconButton(
-                      onPressed:() {},
-                      icon: const Icon(Icons.edit),
-                      color: Colors.orange,
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        final docUser = FirebaseFirestore.instance
-                            .collection("movies")
-                            .doc(document['id']);
-
-                        docUser.delete();
-                      },
-                      icon: const Icon(Icons.delete),
-                      color: Colors.red,
-                    ),
-                  ]),
-                ),
+      StreamBuilder(
+          stream: FirebaseFirestore.instance.collection("wallet").orderBy("value", descending: true).snapshots(),
+          builder:
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (!snapshot.hasData) {
+              return const Center(
+                child: CircularProgressIndicator(),
               );
-          }).toList(),
-          );
-        }
-    ),
+            }
+
+            return ListView(
+
+              children: snapshot.data!.docs.map((document) {
+                DocumentReference<Map<String, dynamic>>;
+                return ListTile(
+                  leading: const Icon(Icons.attach_money),
+                  title: Text(
+                    document['nameType'],
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: Text(
+                    document['value'].toString(),
+                    style: document['tipo'] == "Lucro"
+                        ? TextStyle(color: Colors.green)
+                        : TextStyle(color: Colors.red),
+                  ),
+                  trailing: SizedBox(
+                    width: 100,
+                    child: Row(children: <Widget>[
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.edit),
+                        color: Colors.orange,
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          final docUser = FirebaseFirestore.instance
+                              .collection("wallet")
+                              .doc(document['id']);
+
+                          docUser.delete();
+                        },
+                        icon: const Icon(Icons.delete),
+                        color: Colors.red,
+                      ),
+                    ]),
+                  ),
+                );
+              }).toList(),
+            );
+          }),
       Column(
         children: [
+          SizedBox(height: 18),
           Text(
             'Bem Vindo, ${user?.displayName ?? nomeGenerico}!',
             style: optionStyle,
           ),
-          Text(sumWallet().toString(), style: optionStyle,)
+          SizedBox(height: 40),
+          Container(
+            width: 300,
+            height: 150,
+            child: Card(
+              child: FutureBuilder(
+                future: FirebaseFirestore.instance.collection('wallet').get(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> querySnapshot) {
+                  if (querySnapshot.hasError) {
+                    return Text("Something went wrong");
+                  }
+
+                  if (querySnapshot.connectionState == ConnectionState.done) {
+                    querySnapshot.data!.docs.forEach((doc) {
+                      if (doc['tipo'] == "Lucro") {
+                        valorPositivo = valorPositivo! + doc['value'];
+                      } else {
+                        valorNegativo = valorNegativo! + doc['value'];
+                      }
+                      sumTotal = valorPositivo! - valorNegativo!;
+                    });
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Total: ",
+                          style: const TextStyle(
+                              fontSize: 30, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          "R\$ ${sumTotal}",
+                          style: const TextStyle(
+                              color: Colors.blue,
+                              fontSize: 50,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    );
+                  }
+                  return Text("loading");
+                },
+              ),
+            ),
+          ),
+          SizedBox(height: 40),
+          Center(
+            child: Column(
+              children: [
+                Container(
+                  width: 300,
+                  height: 150,
+                  child: Card(
+                    child: FutureBuilder(
+                      future:
+                          FirebaseFirestore.instance.collection('wallet').get(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<QuerySnapshot> querySnapshot) {
+                        if (querySnapshot.hasError) {
+                          return Text("Something went wrong");
+                        }
+
+                        if (querySnapshot.connectionState ==
+                            ConnectionState.done) {
+                          querySnapshot.data!.docs.forEach((positivo) {
+                            sumTotalPositivo = valorPositivo;
+                          });
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Lucros: ",
+                                style: const TextStyle(
+                                    fontSize: 30, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Text(
+                                "R\$ ${valorPositivo}",
+                                style: const TextStyle(
+                                    color: Colors.greenAccent,
+                                    fontSize: 50,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          );
+                        }
+                        return Text("loading");
+                      },
+                    ),
+                  ),
+                ),
+                Container(
+                  width: 300,
+                  height: 150,
+                  child: Card(
+                    child: FutureBuilder(
+                      future:
+                          FirebaseFirestore.instance.collection('wallet').get(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<QuerySnapshot> querySnapshot) {
+                        if (querySnapshot.hasError) {
+                          return Text("Something went wrong");
+                        }
+
+                        if (querySnapshot.connectionState ==
+                            ConnectionState.done) {
+                          querySnapshot.data!.docs.forEach((negativo) {
+                            sumTotalNegativo = valorNegativo;
+                          });
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Gastos: ",
+                                style: const TextStyle(
+                                    fontSize: 30, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Text(
+                                "R\$ ${valorNegativo}",
+                                style: const TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 50,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          );
+                        }
+                        return Text("loading");
+                      },
+                    ),
+                  ),
+                )
+              ],
+            ),
+          )
         ],
       ),
       Container(
@@ -349,7 +469,7 @@ class _HomeScreenState extends State<HomeScreen> {
         leading: IconButton(
             onPressed: () {
               final provider =
-              Provider.of<GoogleSignInProvider>(context, listen: false);
+                  Provider.of<GoogleSignInProvider>(context, listen: false);
               provider.logout();
 
               Get.to(() => LoginScreen(),

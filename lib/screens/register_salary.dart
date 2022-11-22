@@ -22,6 +22,7 @@ class _RegisterSalaryState extends State<RegisterSalary>{
   }
 
   final controllerSalary = TextEditingController();
+  final controllerNameType = TextEditingController();
   String? controllerTipo;
 
   List<String> items = ['Lucro', 'Gasto'];
@@ -34,16 +35,19 @@ class _RegisterSalaryState extends State<RegisterSalary>{
   @override
   Widget build(BuildContext context) {
     Widget dropdown() {
-      return SizedBox(
-        width: 500,
+      return Container(
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         child: DropdownButtonFormField<String>(
           decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(horizontal: 10),
+              labelText: "Tipo",
+            labelStyle: TextStyle(color: Colors.black),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(width: 3, color: Colors.blue),
+              borderSide: BorderSide(color: Colors.black),
             ),
+
           ),
-          value: selectedItem,
           items: items
               .map((item) =>
               DropdownMenuItem<String>(
@@ -61,12 +65,13 @@ class _RegisterSalaryState extends State<RegisterSalary>{
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text("Preenchimento de salário"),
+        title: const Text("Preenchimento de custo"),
         backgroundColor: const Color(0xFF2062E6),
         actions: <Widget>[
           IconButton(
               onPressed: () {
                 final salary = WalletRegister(
+                  nameType: controllerNameType.text,
                     value: double.parse(controllerSalary.text!),
                     tipo: controllerTipo);
 
@@ -84,28 +89,41 @@ class _RegisterSalaryState extends State<RegisterSalary>{
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               SizedBox(height: 50),
-
-              SizedBox(
-                width: 500,
-                child: TextFormField(
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                decoration: BoxDecoration(
+                  color: Colors.white, border: Border.all(color: Colors.grey),
+                ),
+                child: TextField(
+                  controller: controllerNameType,
+                  style: TextStyle(color: Colors.black),
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                    labelText: "Nome do item",
+                    labelStyle: TextStyle(color: Colors.black),
+                    border: InputBorder.none
+                  ),
+                ),
+              ),
+              SizedBox(height: 50,),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                decoration: BoxDecoration(
+                  color: Colors.white, border: Border.all(color: Colors.grey),
+                ),
+                child: TextField(
                   controller: controllerSalary,
-                  decoration: const InputDecoration(
-
-                    labelText: 'Salário',
-                    border: OutlineInputBorder(
-                      borderRadius: const BorderRadius.all(
-                        const Radius.circular(10.0),
-                      ),
-                      borderSide: BorderSide(
-                        width: 0,
-                      ),
-                    ),
+                  style: TextStyle(color: Colors.black),
+                  decoration: InputDecoration(
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                      labelText: "Valor",
+                      labelStyle: TextStyle(color: Colors.black),
+                      border: InputBorder.none
                   ),
                 ),
               ),
               SizedBox(height: 50),
               dropdown()
-
             ],
           ),
         ),
