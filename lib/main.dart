@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         child: GetMaterialApp(
           title: 'Monkey Finances',
           debugShowCheckedModeBanner: false,
-          home: HomeScreen(),
+          home: LoginScreen(),
         ),
       );
 }

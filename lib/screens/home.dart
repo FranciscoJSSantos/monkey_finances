@@ -38,56 +38,13 @@ class _HomeScreenState extends State<HomeScreen> {
     await docUser.set(json);
   }
 
-  final controllerSalary = TextEditingController();
-  String? controllerTipo;
-
   var dbRef;
+
+  final _form = GlobalKey<FormState>();
 
   @override
   void initialState() {
     super.initState();
-  }
-
-  Widget _buildSalaray() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Container(
-          alignment: Alignment.centerLeft,
-          decoration: BoxDecoration(
-            color: const Color(0x82828282),
-            borderRadius: BorderRadius.circular(10.0),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.white,
-                blurRadius: 6.0,
-                offset: Offset(0, 2),
-              ),
-            ],
-          ),
-          height: 60.0,
-          width: 200.0,
-          child: TextField(
-            controller: controllerSalary,
-            keyboardType: TextInputType.number,
-            style: const TextStyle(color: Colors.white, fontFamily: 'Poppins'),
-            decoration: const InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.only(top: 14.0),
-              prefixIcon: Icon(
-                Icons.attach_money_rounded,
-                color: Colors.black,
-              ),
-              hintText: 'Valor',
-              hintStyle: TextStyle(
-                color: Colors.black,
-                fontFamily: 'Poppins',
-              ),
-            ),
-          ),
-        )
-      ],
-    );
   }
 
   Widget _monkey_image() {
@@ -238,6 +195,9 @@ class _HomeScreenState extends State<HomeScreen> {
         .snapshots()
         .map((dados) => dados.data() as List<WalletRegister>);
   }
+  final controllerSalary = TextEditingController();
+  final controllerNameType = TextEditingController();
+  String? controllerTipo;
 
   @override
   Widget build(BuildContext context) {
@@ -282,7 +242,103 @@ class _HomeScreenState extends State<HomeScreen> {
                     width: 100,
                     child: Row(children: <Widget>[
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          controllerNameType.text = document['nameType'];
+                          controllerTipo = document['tipo'];
+                          controllerSalary.text = document['value'].toString();
+
+                          showDialog(context: context,
+                              builder: (context) => Dialog(
+                                child: Container(
+                                  color: Colors.white,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: ListView(
+                                        children: <Widget>[
+                                          Padding(
+                                            padding: const EdgeInsets.all(10),
+                                            child: Form(
+                                              key: _form,
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: <Widget>[
+                                                  SizedBox(height: 50),
+                                                  Container(
+                                                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.white, border: Border.all(color: Colors.grey),
+                                                    ),
+                                                    child: TextField(
+                                                      controller: controllerNameType,
+                                                      style: TextStyle(color: Colors.black),
+                                                      decoration: InputDecoration(
+                                                          contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                                                          labelText: "Nome do item",
+                                                          labelStyle: TextStyle(color: Colors.black),
+                                                          border: InputBorder.none
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(height: 50,),
+                                                  Container(
+                                                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.white, border: Border.all(color: Colors.grey),
+                                                    ),
+                                                    child: TextField(
+                                                      controller: controllerSalary,
+                                                      style: TextStyle(color: Colors.black),
+                                                      decoration: InputDecoration(
+                                                          contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                                                          labelText: "Valor",
+                                                          labelStyle: TextStyle(color: Colors.black),
+                                                          border: InputBorder.none
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(height: 50),
+                                                  dropdown(),
+                                                  SizedBox(height: 50),
+                                                  ElevatedButton(onPressed: () {
+                                                    final docUser = FirebaseFirestore.instance
+                                                        .collection("wallet")
+                                                        .doc(document['id']);
+
+                                                    docUser.update({
+                                                      "nameType": controllerNameType.text,
+                                                      "value": double.parse(controllerSalary.text!),
+                                                      "tipo": controllerTipo
+                                                    }).whenComplete(() => Navigator.pop(context));
+                                                  },
+                                                      child: Padding(
+                                                    padding: const EdgeInsets.all(16.0),
+                                                    child: Text("Alterar")
+                                                  )
+
+                                                  ),
+                                                  SizedBox(height: 50),
+                                                  ElevatedButton(
+                                                      onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                      style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                                                      child: Padding(
+                                                          padding: const EdgeInsets.all(16.0),
+                                                          child: Text("Voltar")
+                                                      )
+
+                                                  ),
+
+                                                ],
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                    ),
+                                  ),
+                                ),
+                              ));
+                        },
                         icon: const Icon(Icons.edit),
                         color: Colors.orange,
                       ),
