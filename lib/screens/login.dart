@@ -269,7 +269,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 fontWeight: FontWeight.w400),
           ),
           TextSpan(
-            text: 'Inscreva-se',
+            text: 'Cadastre-se',
             style: TextStyle(
                 color: Colors.white,
                 fontSize: 18.0,

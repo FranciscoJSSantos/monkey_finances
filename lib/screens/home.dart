@@ -45,6 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initialState() {
     super.initState();
+    pegarUsusario();
   }
 
   Widget _monkey_image() {
@@ -109,7 +110,26 @@ class _HomeScreenState extends State<HomeScreen> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
-  //componente pra usuario
+  // user logado normal
+  final _firebaseAuth = FirebaseAuth.instance;
+  String nome = "";
+  String email = "";
+
+  pegarUsusario() async{
+    User? usuario = await _firebaseAuth.currentUser;
+    if(usuario != null) {
+      setState(() {
+        nome = usuario.displayName!;
+        email = usuario.email!;
+      });
+    }
+  }
+
+  @override
+
+
+  //componente pra usuario do google
+
   var user = FirebaseAuth.instance.currentUser;
 
   var nomeGenerico = "brenno";
@@ -157,11 +177,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 150),
-                CircleAvatar(
+                user?.photoURL != null
+                    ? CircleAvatar(
                   minRadius: 50,
                   maxRadius: 50,
-                  backgroundImage: NetworkImage(user?.photoURL ?? fotoGenerica),
+                  backgroundImage: NetworkImage(user?.photoURL ?? ""),
                 )
+                    :    const Icon(Icons.account_circle, size: 100, color: Colors.grey,)
               ],
             ),
             Column(
@@ -169,11 +191,11 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 const SizedBox(height: 200),
                 Text(
-                  'Nome: ${user?.displayName ?? nomeGenerico}',
+                  'Nome: ${user?.displayName ?? nome}',
                   style: const TextStyle(color: Colors.black, fontSize: 18),
                 ),
                 const SizedBox(height: 12),
-                Text("Email: ${user?.email ?? emailGenerico}",
+                Text("Email: ${user?.email ?? email}",
                     style: const TextStyle(color: Colors.black, fontSize: 18))
               ],
             )
@@ -227,7 +249,9 @@ class _HomeScreenState extends State<HomeScreen> {
               children: snapshot.data!.docs.map((document) {
                 DocumentReference<Map<String, dynamic>>;
                 return ListTile(
-                  leading: const Icon(Icons.attach_money),
+                  leading: document["tipo"] == "Lucro"
+                  ? const Icon(Icons.expand_less, color: Colors.green, size: 40)
+                  : const Icon(Icons.expand_more, color: Colors.red, size: 40),
                   title: Text(
                     document['nameType'],
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -309,6 +333,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       "value": double.parse(controllerSalary.text!),
                                                       "tipo": controllerTipo
                                                     }).whenComplete(() => Navigator.pop(context));
+
+                                                    Navigator.pop(context);
                                                   },
                                                       child: Padding(
                                                     padding: const EdgeInsets.all(16.0),
@@ -340,7 +366,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ));
                         },
                         icon: const Icon(Icons.edit),
-                        color: Colors.orange,
+                        color: Colors.blue,
                       ),
                       IconButton(
                         onPressed: () {
@@ -359,157 +385,169 @@ class _HomeScreenState extends State<HomeScreen> {
               }).toList(),
             );
           }),
-      Column(
-        children: [
-          SizedBox(height: 18),
-          Text(
-            'Bem Vindo, ${user?.displayName ?? nomeGenerico}!',
-            style: optionStyle,
-          ),
-          SizedBox(height: 40),
-          Container(
-            width: 300,
-            height: 150,
-            child: Card(
-              child: FutureBuilder(
-                future: FirebaseFirestore.instance.collection('wallet').get(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<QuerySnapshot> querySnapshot) {
-                  if (querySnapshot.hasError) {
-                    return Text("Something went wrong");
-                  }
-
-                  if (querySnapshot.connectionState == ConnectionState.done) {
-                    querySnapshot.data!.docs.forEach((doc) {
-                      if (doc['tipo'] == "Lucro") {
-                        valorPositivo = valorPositivo! + doc['value'];
-                      } else {
-                        valorNegativo = valorNegativo! + doc['value'];
-                      }
-                      sumTotal = valorPositivo! - valorNegativo!;
-                    });
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Total: ",
-                          style: const TextStyle(
-                              fontSize: 30, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Text(
-                          "R\$ ${sumTotal}",
-                          style: const TextStyle(
-                              color: Colors.blue,
-                              fontSize: 50,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    );
-                  }
-                  return Text("loading");
-                },
+      Container(
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            children: [
+              SizedBox(height: 18),
+              Text(
+                'Bem Vindo, ${user?.displayName ?? nomeGenerico}!',
+                style: optionStyle,
               ),
-            ),
-          ),
-          SizedBox(height: 40),
-          Center(
-            child: Column(
-              children: [
-                Container(
-                  width: 300,
-                  height: 150,
-                  child: Card(
-                    child: FutureBuilder(
-                      future:
-                          FirebaseFirestore.instance.collection('wallet').get(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<QuerySnapshot> querySnapshot) {
-                        if (querySnapshot.hasError) {
-                          return Text("Something went wrong");
-                        }
+              SizedBox(height: 20),
+              Container(
+                width: 300,
+                height: 150,
+                child: Card(
+                  child: FutureBuilder(
+                    future: FirebaseFirestore.instance.collection('wallet').get(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<QuerySnapshot> querySnapshot) {
+                      if (querySnapshot.hasError) {
+                        return Text("Something went wrong");
+                      }
 
-                        if (querySnapshot.connectionState ==
-                            ConnectionState.done) {
-                          querySnapshot.data!.docs.forEach((positivo) {
-                            sumTotalPositivo = valorPositivo;
-                          });
-                          return Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Lucros: ",
-                                style: const TextStyle(
-                                    fontSize: 30, fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Text(
-                                "R\$ ${valorPositivo}",
-                                style: const TextStyle(
-                                    color: Colors.greenAccent,
-                                    fontSize: 50,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          );
-                        }
-                        return Text("loading");
-                      },
-                    ),
+                      if (querySnapshot.connectionState == ConnectionState.done) {
+                        querySnapshot.data!.docs.forEach((doc) {
+                          if (doc['tipo'] == "Lucro") {
+                            valorPositivo = valorPositivo! + doc['value'];
+                          } else {
+                            valorNegativo = valorNegativo! + doc['value'];
+                          }
+                          sumTotal = valorPositivo! - valorNegativo!;
+                        });
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Total: ",
+                              style: const TextStyle(
+                                  fontSize: 30, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Text(
+                              "R\$ ${sumTotal}",
+                              style: const TextStyle(
+                                  color: Colors.blue,
+                                  fontSize: 50,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        );
+                      }
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    },
                   ),
                 ),
-                Container(
-                  width: 300,
-                  height: 150,
-                  child: Card(
-                    child: FutureBuilder(
-                      future:
-                          FirebaseFirestore.instance.collection('wallet').get(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<QuerySnapshot> querySnapshot) {
-                        if (querySnapshot.hasError) {
-                          return Text("Something went wrong");
-                        }
+              ),
+              SizedBox(height: 10),
+              Center(
+                child: Column(
+                  children: [
+                    Container(
+                      width: 300,
+                      height: 150,
+                      child: Card(
+                        child: FutureBuilder(
+                          future:
+                              FirebaseFirestore.instance.collection('wallet').get(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<QuerySnapshot> querySnapshot) {
+                            if (querySnapshot.hasError) {
+                              return Text("Something went wrong");
+                            }
 
-                        if (querySnapshot.connectionState ==
-                            ConnectionState.done) {
-                          querySnapshot.data!.docs.forEach((negativo) {
-                            sumTotalNegativo = valorNegativo;
-                          });
-                          return Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Gastos: ",
-                                style: const TextStyle(
-                                    fontSize: 30, fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Text(
-                                "R\$ ${valorNegativo}",
-                                style: const TextStyle(
-                                    color: Colors.red,
-                                    fontSize: 50,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          );
-                        }
-                        return Text("loading");
-                      },
+                            if (querySnapshot.connectionState ==
+                                ConnectionState.done) {
+                              querySnapshot.data!.docs.forEach((positivo) {
+                                sumTotalPositivo = valorPositivo;
+                              });
+                              return Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Lucros: ",
+                                    style: const TextStyle(
+                                        fontSize: 30, fontWeight: FontWeight.bold),
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Text(
+                                    "R\$ ${valorPositivo}",
+                                    style: const TextStyle(
+                                        color: Colors.greenAccent,
+                                        fontSize: 50,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              );
+                            }
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );;
+                          },
+                        ),
+                      ),
                     ),
-                  ),
-                )
-              ],
-            ),
-          )
-        ],
+                    SizedBox(height: 40,),
+                    Container(
+                      width: 300,
+                      height: 150,
+                      child: Card(
+                        child: FutureBuilder(
+                          future:
+                              FirebaseFirestore.instance.collection('wallet').get(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<QuerySnapshot> querySnapshot) {
+                            if (querySnapshot.hasError) {
+                              return Text("Something went wrong");
+                            }
+
+                            if (querySnapshot.connectionState ==
+                                ConnectionState.done) {
+                              querySnapshot.data!.docs.forEach((negativo) {
+                                sumTotalNegativo = valorNegativo;
+                              });
+                              return Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Gastos: ",
+                                    style: const TextStyle(
+                                        fontSize: 30, fontWeight: FontWeight.bold),
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Text(
+                                    "R\$ ${valorNegativo}",
+                                    style: const TextStyle(
+                                        color: Colors.red,
+                                        fontSize: 50,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              );
+                            }
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );;
+                          },
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
       ),
       Container(
           alignment: Alignment.center,

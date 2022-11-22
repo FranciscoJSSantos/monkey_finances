@@ -94,39 +94,39 @@ class _RegisterScreenState extends State<RegisterScreen> {
       );
     }
 
-    // Widget _buildNameTF() {
-    //   return Column(
-    //     crossAxisAlignment: CrossAxisAlignment.start,
-    //     children: <Widget>[
-    //       const Text(
-    //         'Nome',
-    //         style: kLabelStyle,
-    //       ),
-    //       const SizedBox(height: 10.0),
-    //       Container(
-    //         alignment: Alignment.centerLeft,
-    //         decoration: kBoxDecorationStyle,
-    //         height: 60.0,
-    //         child: TextField(
-    //           controller: controllerName,
-    //           keyboardType: TextInputType.name,
-    //           style:
-    //               const TextStyle(color: Colors.white, fontFamily: 'Poppins'),
-    //           decoration: const InputDecoration(
-    //             border: InputBorder.none,
-    //             contentPadding: EdgeInsets.only(top: 14.0),
-    //             prefixIcon: Icon(
-    //               Icons.person,
-    //               color: Colors.white,
-    //             ),
-    //             hintText: 'Nome',
-    //             hintStyle: kHintTextStyle,
-    //           ),
-    //         ),
-    //       )
-    //     ],
-    //   );
-    // }
+     Widget _buildNameTF() {
+       return Column(
+         crossAxisAlignment: CrossAxisAlignment.start,
+         children: <Widget>[
+           const Text(
+             'Nome',
+             style: kLabelStyle,
+           ),
+           const SizedBox(height: 10.0),
+           Container(
+             alignment: Alignment.centerLeft,
+             decoration: kBoxDecorationStyle,
+             height: 60.0,
+             child: TextField(
+               controller: controllerName,
+               keyboardType: TextInputType.name,
+               style:
+                   const TextStyle(color: Colors.white, fontFamily: 'Poppins'),
+               decoration: const InputDecoration(
+                 border: InputBorder.none,
+                 contentPadding: EdgeInsets.only(top: 14.0),
+                 prefixIcon: Icon(
+                   Icons.person,
+                   color: Colors.white,
+                 ),
+                 hintText: 'Nome',
+                 hintStyle: kHintTextStyle,
+               ),
+             ),
+           )
+         ],
+       );
+     }
 
     Widget _buildEmailTF() {
       return Column(
@@ -138,16 +138,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
           const SizedBox(height: 10.0),
           Container(
+            alignment: Alignment.centerLeft,
+            decoration: kBoxDecorationStyle,
+            height: 60.0,
             child: TextField(
               controller: controllerEmail,
-              keyboardType: TextInputType.emailAddress,
+              keyboardType: TextInputType.name,
               style:
-                  const TextStyle(color: Colors.white, fontFamily: 'Poppins'),
+              const TextStyle(color: Colors.white, fontFamily: 'Poppins'),
               decoration: const InputDecoration(
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.only(top: 14.0),
                 prefixIcon: Icon(
-                  Icons.email,
+                  Icons.person,
                   color: Colors.white,
                 ),
                 hintText: 'Email',
@@ -309,10 +312,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      _monkey_image(),
+                      SizedBox(height: 50,),
                       Container(
                         alignment: Alignment.center,
-                        child: const Text('Crie Sua Conta',
+                        child: const Text('Cadastro',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontFamily: 'Poppins',
@@ -320,7 +323,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 fontWeight: FontWeight.bold)),
                       ),
                       const SizedBox(height: 30.0),
-                      // _buildNameTF(),
+                       _buildNameTF(),
                       const SizedBox(height: 30.0),
                       _buildEmailTF(),
                       const SizedBox(height: 30.0),

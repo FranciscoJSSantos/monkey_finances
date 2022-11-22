@@ -66,7 +66,7 @@ class _RegisterSalaryState extends State<RegisterSalary>{
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text("Preenchimento de custo"),
-        backgroundColor: const Color(0xFF2062E6),
+        backgroundColor: Colors.black,
         actions: <Widget>[
           IconButton(
               onPressed: () {
@@ -78,7 +78,7 @@ class _RegisterSalaryState extends State<RegisterSalary>{
                 createSalary(salary);
                 Navigator.of(context).pop();
               },
-              icon: const Icon(Icons.save))
+              icon: const Icon(Icons.save, color: Color(0xFF2062E6),))
         ],
       ),
       body: Padding(
