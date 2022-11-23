@@ -22,9 +22,14 @@ class WalletRegister {
   final double? value;
   final String? tipo;
 
-  WalletRegister({this.id = '', required this.nameType,required this.value, required this.tipo});
+  WalletRegister(
+      {this.id = '',
+      required this.nameType,
+      required this.value,
+      required this.tipo});
 
-  Map<String, dynamic> toJson() => {'id': id, 'nameType': nameType,'value': value, 'tipo': tipo};
+  Map<String, dynamic> toJson() =>
+      {'id': id, 'nameType': nameType, 'value': value, 'tipo': tipo};
 }
 
 class _HomeScreenState extends State<HomeScreen> {
@@ -115,9 +120,9 @@ class _HomeScreenState extends State<HomeScreen> {
   String nome = "";
   String email = "";
 
-  pegarUsusario() async{
-    User? usuario = await _firebaseAuth.currentUser;
-    if(usuario != null) {
+  pegarUsusario() async {
+    User? usuario = _firebaseAuth.currentUser;
+    if (usuario != null) {
       setState(() {
         nome = usuario.displayName!;
         email = usuario.email!;
@@ -126,7 +131,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
-
 
   //componente pra usuario do google
 
@@ -147,13 +151,14 @@ class _HomeScreenState extends State<HomeScreen> {
         decoration: InputDecoration(
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(width: 3, color: Colors.blue),
+            borderSide: const BorderSide(width: 3, color: Colors.blue),
           ),
         ),
         value: controllerTipo,
         items: items
             .map((item) => DropdownMenuItem<String>(
-                value: item, child: Text(item, style: TextStyle(fontSize: 24))))
+                value: item,
+                child: Text(item, style: const TextStyle(fontSize: 24))))
             .toList(),
         onChanged: (item) => setState(() {
           selectedItem = item;
@@ -179,11 +184,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(height: 150),
                 user?.photoURL != null
                     ? CircleAvatar(
-                  minRadius: 50,
-                  maxRadius: 50,
-                  backgroundImage: NetworkImage(user?.photoURL ?? ""),
-                )
-                    :    const Icon(Icons.account_circle, size: 100, color: Colors.grey,)
+                        minRadius: 50,
+                        maxRadius: 50,
+                        backgroundImage: NetworkImage(user?.photoURL ?? ""),
+                      )
+                    : const Icon(
+                        Icons.account_circle,
+                        size: 100,
+                        color: Colors.grey,
+                      )
               ],
             ),
             Column(
@@ -213,6 +222,7 @@ class _HomeScreenState extends State<HomeScreen> {
         .snapshots()
         .map((dados) => dados.data() as List<WalletRegister>);
   }
+
   final controllerSalary = TextEditingController();
   final controllerNameType = TextEditingController();
   String? controllerTipo;
@@ -231,7 +241,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
     final List<Widget> widgetOptions = <Widget>[
       StreamBuilder(
-          stream: FirebaseFirestore.instance.collection("wallet").orderBy("value", descending: true).snapshots(),
+          stream: FirebaseFirestore.instance
+              .collection("wallet")
+              .orderBy("value", descending: true)
+              .snapshots(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (!snapshot.hasData) {
@@ -241,22 +254,24 @@ class _HomeScreenState extends State<HomeScreen> {
             }
 
             return ListView(
-
               children: snapshot.data!.docs.map((document) {
                 DocumentReference<Map<String, dynamic>>;
                 return ListTile(
                   leading: document["tipo"] == "Lucro"
-                  ? const Icon(Icons.expand_less, color: Colors.green, size: 40)
-                  : const Icon(Icons.expand_more, color: Colors.red, size: 40),
+                      ? const Icon(Icons.expand_less,
+                          color: Colors.green, size: 40)
+                      : const Icon(Icons.expand_more,
+                          color: Colors.red, size: 40),
                   title: Text(
                     document['nameType'],
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   subtitle: Text(
                     document['value'].toString(),
                     style: document['tipo'] == "Lucro"
-                        ? TextStyle(color: Colors.green)
-                        : TextStyle(color: Colors.red),
+                        ? const TextStyle(color: Colors.green)
+                        : const TextStyle(color: Colors.red),
                   ),
                   trailing: SizedBox(
                     width: 100,
@@ -267,99 +282,150 @@ class _HomeScreenState extends State<HomeScreen> {
                           controllerTipo = document['tipo'];
                           controllerSalary.text = document['value'].toString();
 
-                          showDialog(context: context,
+                          showDialog(
+                              context: context,
                               builder: (context) => Dialog(
-                                child: Container(
-                                  color: Colors.white,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: ListView(
-                                        children: <Widget>[
-                                          Padding(
-                                            padding: const EdgeInsets.all(10),
-                                            child: Form(
-                                              key: _form,
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.center,
-                                                children: <Widget>[
-                                                  SizedBox(height: 50),
-                                                  Container(
-                                                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.white, border: Border.all(color: Colors.grey),
-                                                    ),
-                                                    child: TextField(
-                                                      controller: controllerNameType,
-                                                      style: TextStyle(color: Colors.black),
-                                                      decoration: InputDecoration(
-                                                          contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                                                          labelText: "Nome do item",
-                                                          labelStyle: TextStyle(color: Colors.black),
-                                                          border: InputBorder.none
+                                    child: Container(
+                                      color: Colors.white,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: ListView(
+                                          children: <Widget>[
+                                            Padding(
+                                              padding: const EdgeInsets.all(10),
+                                              child: Form(
+                                                key: _form,
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: <Widget>[
+                                                    const SizedBox(height: 50),
+                                                    Container(
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
+                                                          horizontal: 10,
+                                                          vertical: 5),
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.white,
+                                                        border: Border.all(
+                                                            color: Colors.grey),
+                                                      ),
+                                                      child: TextField(
+                                                        controller:
+                                                            controllerNameType,
+                                                        style: const TextStyle(
+                                                            color:
+                                                                Colors.black),
+                                                        decoration: const InputDecoration(
+                                                            contentPadding:
+                                                                EdgeInsets
+                                                                    .symmetric(
+                                                                        horizontal:
+                                                                            10),
+                                                            labelText:
+                                                                "Nome do item",
+                                                            labelStyle:
+                                                                TextStyle(
+                                                                    color: Colors
+                                                                        .black),
+                                                            border: InputBorder
+                                                                .none),
                                                       ),
                                                     ),
-                                                  ),
-                                                  SizedBox(height: 50,),
-                                                  Container(
-                                                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.white, border: Border.all(color: Colors.grey),
+                                                    const SizedBox(
+                                                      height: 50,
                                                     ),
-                                                    child: TextField(
-                                                      controller: controllerSalary,
-                                                      style: TextStyle(color: Colors.black),
-                                                      decoration: InputDecoration(
-                                                          contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                                                          labelText: "Valor",
-                                                          labelStyle: TextStyle(color: Colors.black),
-                                                          border: InputBorder.none
+                                                    Container(
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
+                                                          horizontal: 10,
+                                                          vertical: 5),
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.white,
+                                                        border: Border.all(
+                                                            color: Colors.grey),
+                                                      ),
+                                                      child: TextField(
+                                                        controller:
+                                                            controllerSalary,
+                                                        style: const TextStyle(
+                                                            color:
+                                                                Colors.black),
+                                                        decoration: const InputDecoration(
+                                                            contentPadding:
+                                                                EdgeInsets
+                                                                    .symmetric(
+                                                                        horizontal:
+                                                                            10),
+                                                            labelText: "Valor",
+                                                            labelStyle:
+                                                                TextStyle(
+                                                                    color: Colors
+                                                                        .black),
+                                                            border: InputBorder
+                                                                .none),
                                                       ),
                                                     ),
-                                                  ),
-                                                  SizedBox(height: 50),
-                                                  dropdown(),
-                                                  SizedBox(height: 50),
-                                                  ElevatedButton(onPressed: () {
-                                                    final docUser = FirebaseFirestore.instance
-                                                        .collection("wallet")
-                                                        .doc(document['id']);
+                                                    const SizedBox(height: 50),
+                                                    dropdown(),
+                                                    const SizedBox(height: 50),
+                                                    ElevatedButton(
+                                                        onPressed: () {
+                                                          final docUser =
+                                                              FirebaseFirestore
+                                                                  .instance
+                                                                  .collection(
+                                                                      "wallet")
+                                                                  .doc(document[
+                                                                      'id']);
 
-                                                    docUser.update({
-                                                      "nameType": controllerNameType.text,
-                                                      "value": double.parse(controllerSalary.text!),
-                                                      "tipo": controllerTipo
-                                                    }).whenComplete(() => Navigator.pop(context));
+                                                          docUser.update({
+                                                            "nameType":
+                                                                controllerNameType
+                                                                    .text,
+                                                            "value": double.parse(
+                                                                controllerSalary
+                                                                    .text),
+                                                            "tipo":
+                                                                controllerTipo
+                                                          }).whenComplete(() =>
+                                                              Navigator.pop(
+                                                                  context));
 
-                                                    Navigator.pop(context);
-                                                  },
-                                                      child: Padding(
-                                                    padding: const EdgeInsets.all(16.0),
-                                                    child: Text("Alterar")
-                                                  )
-
-                                                  ),
-                                                  SizedBox(height: 50),
-                                                  ElevatedButton(
-                                                      onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                      style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                                                      child: Padding(
-                                                          padding: const EdgeInsets.all(16.0),
-                                                          child: Text("Voltar")
-                                                      )
-
-                                                  ),
-
-                                                ],
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child: const Padding(
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    16.0),
+                                                            child: Text(
+                                                                "Alterar"))),
+                                                    const SizedBox(height: 50),
+                                                    ElevatedButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        },
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                                backgroundColor:
+                                                                    Colors.red),
+                                                        child: const Padding(
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    16.0),
+                                                            child: Text(
+                                                                "Voltar"))),
+                                                  ],
+                                                ),
                                               ),
-                                            ),
-                                          )
-                                        ],
+                                            )
+                                          ],
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ),
-                              ));
+                                  ));
                         },
                         icon: const Icon(Icons.edit),
                         color: Colors.blue,
@@ -386,46 +452,48 @@ class _HomeScreenState extends State<HomeScreen> {
           scrollDirection: Axis.vertical,
           child: Column(
             children: [
-              SizedBox(height: 18),
-              Text(
-                'Bem Vindo, ${user?.displayName ?? nomeGenerico}!',
+              const SizedBox(height: 18),
+              const Text(
+                'Bem Vindo!',
                 style: optionStyle,
               ),
-              SizedBox(height: 20),
-              Container(
+              const SizedBox(height: 20),
+              SizedBox(
                 width: 300,
                 height: 150,
                 child: Card(
                   child: FutureBuilder(
-                    future: FirebaseFirestore.instance.collection('wallet').get(),
+                    future:
+                        FirebaseFirestore.instance.collection('wallet').get(),
                     builder: (BuildContext context,
                         AsyncSnapshot<QuerySnapshot> querySnapshot) {
                       if (querySnapshot.hasError) {
-                        return Text("Something went wrong");
+                        return const Text("Something went wrong");
                       }
 
-                      if (querySnapshot.connectionState == ConnectionState.done) {
-                        querySnapshot.data!.docs.forEach((doc) {
+                      if (querySnapshot.connectionState ==
+                          ConnectionState.done) {
+                        for (var doc in querySnapshot.data!.docs) {
                           if (doc['tipo'] == "Lucro") {
                             valorPositivo = valorPositivo! + doc['value'];
                           } else {
                             valorNegativo = valorNegativo! + doc['value'];
                           }
                           sumTotal = valorPositivo! - valorNegativo!;
-                        });
+                        }
                         return Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
+                            const Text(
                               "Total: ",
-                              style: const TextStyle(
+                              style: TextStyle(
                                   fontSize: 30, fontWeight: FontWeight.bold),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 20,
                             ),
                             Text(
-                              "R\$ ${sumTotal}",
+                              "R\$ $sumTotal",
                               style: const TextStyle(
                                   color: Colors.blue,
                                   fontSize: 50,
@@ -441,41 +509,43 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Center(
                 child: Column(
                   children: [
-                    Container(
+                    SizedBox(
                       width: 300,
                       height: 150,
                       child: Card(
                         child: FutureBuilder(
-                          future:
-                              FirebaseFirestore.instance.collection('wallet').get(),
+                          future: FirebaseFirestore.instance
+                              .collection('wallet')
+                              .get(),
                           builder: (BuildContext context,
                               AsyncSnapshot<QuerySnapshot> querySnapshot) {
                             if (querySnapshot.hasError) {
-                              return Text("Something went wrong");
+                              return const Text("Something went wrong");
                             }
 
                             if (querySnapshot.connectionState ==
                                 ConnectionState.done) {
-                              querySnapshot.data!.docs.forEach((positivo) {
+                              for (var positivo in querySnapshot.data!.docs) {
                                 sumTotalPositivo = valorPositivo;
-                              });
+                              }
                               return Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(
+                                  const Text(
                                     "Lucros: ",
-                                    style: const TextStyle(
-                                        fontSize: 30, fontWeight: FontWeight.bold),
+                                    style: TextStyle(
+                                        fontSize: 30,
+                                        fontWeight: FontWeight.bold),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 20,
                                   ),
                                   Text(
-                                    "R\$ ${valorPositivo}",
+                                    "R\$ $valorPositivo",
                                     style: const TextStyle(
                                         color: Colors.greenAccent,
                                         fontSize: 50,
@@ -486,43 +556,47 @@ class _HomeScreenState extends State<HomeScreen> {
                             }
                             return const Center(
                               child: CircularProgressIndicator(),
-                            );;
+                            );
                           },
                         ),
                       ),
                     ),
-                    SizedBox(height: 20,),
-                    Container(
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    SizedBox(
                       width: 300,
                       height: 150,
                       child: Card(
                         child: FutureBuilder(
-                          future:
-                              FirebaseFirestore.instance.collection('wallet').get(),
+                          future: FirebaseFirestore.instance
+                              .collection('wallet')
+                              .get(),
                           builder: (BuildContext context,
                               AsyncSnapshot<QuerySnapshot> querySnapshot) {
                             if (querySnapshot.hasError) {
-                              return Text("Something went wrong");
+                              return const Text("Something went wrong");
                             }
 
                             if (querySnapshot.connectionState ==
                                 ConnectionState.done) {
-                              querySnapshot.data!.docs.forEach((negativo) {
+                              for (var negativo in querySnapshot.data!.docs) {
                                 sumTotalNegativo = valorNegativo;
-                              });
+                              }
                               return Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(
+                                  const Text(
                                     "Gastos: ",
-                                    style: const TextStyle(
-                                        fontSize: 30, fontWeight: FontWeight.bold),
+                                    style: TextStyle(
+                                        fontSize: 30,
+                                        fontWeight: FontWeight.bold),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 20,
                                   ),
                                   Text(
-                                    "R\$ ${valorNegativo}",
+                                    "R\$ $valorNegativo",
                                     style: const TextStyle(
                                         color: Colors.red,
                                         fontSize: 50,
@@ -533,7 +607,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             }
                             return const Center(
                               child: CircularProgressIndicator(),
-                            );;
+                            );
                           },
                         ),
                       ),
