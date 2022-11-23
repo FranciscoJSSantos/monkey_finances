@@ -190,10 +190,6 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(height: 200),
-                Text(
-                  'Nome: ${user?.displayName ?? nome}',
-                  style: const TextStyle(color: Colors.black, fontSize: 18),
-                ),
                 const SizedBox(height: 12),
                 Text("Email: ${user?.email ?? email}",
                     style: const TextStyle(color: Colors.black, fontSize: 18))
@@ -495,7 +491,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 40,),
+                    SizedBox(height: 20,),
                     Container(
                       width: 300,
                       height: 150,

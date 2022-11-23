@@ -16,21 +16,18 @@ class UserRegister {
   final String? name;
   final String? email;
   final String? password;
-  final String? confirmPassword;
 
   UserRegister(
       {this.id = '',
       required this.name,
       required this.email,
-      required this.password,
-      required this.confirmPassword});
+      required this.password});
 
   Map<String, dynamic> toJson() => {
         'id': id,
         'name': name,
         'email': email,
         'password': password,
-        'confirmPassword': confirmPassword
       };
 }
 
@@ -256,16 +253,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
               final user = UserRegister(
                   name: controllerName.text,
                   email: controllerEmail.text,
-                  password: controllerPassword.text,
-                  confirmPassword: controllerConfirmPassword.text);
+                  password: controllerPassword.text);
 
               if (user.email == "" ||
-                  user.password == "" ||
-                  user.confirmPassword == "") {
+                  user.password == "") {
                 final dialog =
                     await openDialog("Preencha o formulário corretamente");
                 if (dialog == null || dialog.isEmpty) return;
-              } else if (user.password != user.confirmPassword) {
+              } else if (user.password != controllerConfirmPassword.text) {
                 final dialog = await openDialog("As senhas não estão iguais");
                 if (dialog == null || dialog.isEmpty) return;
               } else if (user.password!.length < 5) {
