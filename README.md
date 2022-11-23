@@ -31,4 +31,4 @@
 
 ## Link para Documentação
 
-- https://docs.google.com/document/d/1dWT3KWJm03LXDy20Bk8ql2nsress329mgNKef88Ytwg/edit?usp=sharing
+- https://docs.google.com/document/d/1zcdrJYu1HRR7fmWh5aJoKIJdF-5_v-GuTPXEzG5Jrj4/edit?usp=sharing
